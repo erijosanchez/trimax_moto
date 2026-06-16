@@ -109,9 +109,9 @@ class ApiService {
     await _dio.post(
       '/entregas/$id/completar',
       data: {
-        if (lat != null) 'latitud': lat,
-        if (lng != null) 'longitud': lng,
-        if (notas != null) 'notas': notas,
+        'latitud': ?lat,
+        'longitud': ?lng,
+        'notas': ?notas,
       },
     );
   }
@@ -119,7 +119,7 @@ class ApiService {
   Future<void> fallarEntrega({required int id, String? notas}) async {
     await _dio.post(
       '/entregas/$id/fallar',
-      data: {if (notas != null) 'notas': notas},
+      data: {'notas': ?notas},
     );
   }
 

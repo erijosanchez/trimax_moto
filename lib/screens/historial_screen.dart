@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import '../theme/app_theme.dart';
 
 class HistorialScreen extends StatefulWidget {
   const HistorialScreen({super.key});
@@ -23,7 +24,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
     try {
       final data = await ApiService().historialKm();
       setState(() {
-        _rutas   = data;
+        _rutas = data;
         _loading = false;
       });
     } catch (e) {
@@ -31,50 +32,95 @@ class _HistorialScreenState extends State<HistorialScreen> {
     }
   }
 
-  Future<List<dynamic>> historialKm() async {
-    // Endpoint historial del motorizado autenticado
-    final api = ApiService();
-    final res = await api.entregasHoy(); // placeholder
-    return [];
+  double get _totalKm {
+    double total = 0;
+    for (final r in _rutas) {
+      total += double.tryParse('${r['distance_km'] ?? 0}') ?? 0;
+    }
+    return total;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFf0f2f5),
-      appBar: AppBar(
-        title: const Text('Historial de Km'),
-        backgroundColor: const Color(0xFF1a2035),
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(title: const Text('Historial de Km')),
       body: _loading
-        ? const Center(child: CircularProgressIndicator())
-        : RefreshIndicator(
-            onRefresh: _cargar,
-            child: _rutas.isEmpty
-              ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.route, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text(
-                        'Sin rutas registradas',
-                        style: TextStyle(color: Colors.grey, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _rutas.length,
-                  itemBuilder: (_, i) {
-                    final r = _rutas[i];
-                    return _buildRutaCard(r);
-                  },
-                ),
+          ? const Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: _cargar,
+              child: _rutas.isEmpty
+                  ? ListView(
+                      children: const [
+                        SizedBox(height: 120),
+                        Icon(Icons.route_outlined,
+                            size: 64, color: AppColors.textMuted),
+                        SizedBox(height: 16),
+                        Text(
+                          'Sin rutas registradas',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: AppColors.textSecondary, fontSize: 16),
+                        ),
+                      ],
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.all(16),
+                      children: [
+                        _buildResumen(),
+                        const SizedBox(height: 16),
+                        ..._rutas.map((r) =>
+                            _buildRutaCard(r as Map<String, dynamic>)),
+                      ],
+                    ),
+            ),
+    );
+  }
+
+  Widget _buildResumen() {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: AppColors.brandGradient,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        boxShadow: AppShadows.card,
+      ),
+      child: Row(
+        children: [
+          _resumenItem('${_rutas.length}', 'Rutas'),
+          Container(
+            width: 1,
+            height: 40,
+            color: Colors.white.withValues(alpha: 0.2),
           ),
+          _resumenItem('${_totalKm.toStringAsFixed(1)} km', 'Acumulado'),
+        ],
+      ),
+    );
+  }
+
+  Widget _resumenItem(String valor, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            valor,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.6),
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -82,15 +128,9 @@ class _HistorialScreenState extends State<HistorialScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
-          ),
-        ],
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        boxShadow: AppShadows.card,
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -99,15 +139,13 @@ class _HistorialScreenState extends State<HistorialScreen> {
             Row(
               children: [
                 Container(
-                  width: 48, height: 48,
+                  width: 48,
+                  height: 48,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1a73e8).withOpacity(0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.route,
-                    color: Color(0xFF1a73e8),
-                  ),
+                  child: const Icon(Icons.route, color: AppColors.primary),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -117,28 +155,27 @@ class _HistorialScreenState extends State<HistorialScreen> {
                       Text(
                         r['fecha'] ?? '—',
                         style: const TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           fontSize: 15,
                         ),
                       ),
                       Text(
                         '${r['started_at'] ?? '--'} → ${r['ended_at'] ?? '--'}',
                         style: const TextStyle(
-                          color: Colors.grey,
+                          color: AppColors.textSecondary,
                           fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                 ),
-                // Km destacado
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
                       '${r['distance_km']} km',
                       style: const TextStyle(
-                        color: Color(0xFF1a73e8),
+                        color: AppColors.primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
@@ -146,7 +183,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
                     Text(
                       r['duracion'] ?? '—',
                       style: const TextStyle(
-                        color: Colors.grey,
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                       ),
                     ),
@@ -154,13 +191,13 @@ class _HistorialScreenState extends State<HistorialScreen> {
                 ),
               ],
             ),
-            const Divider(height: 20),
+            const Divider(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _stat('Completadas', '${r['completadas']}', Colors.green),
-                _stat('Fallidas',    '${r['fallidas']}',    Colors.red),
-                _stat('Total',       '${r['total']}',       Colors.grey),
+                _stat('Completadas', '${r['completadas']}', AppColors.success),
+                _stat('Fallidas', '${r['fallidas']}', AppColors.danger),
+                _stat('Total', '${r['total']}', AppColors.textSecondary),
               ],
             ),
           ],
@@ -182,7 +219,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
         ),
         Text(
           label,
-          style: const TextStyle(color: Colors.grey, fontSize: 11),
+          style: const TextStyle(color: AppColors.textSecondary, fontSize: 11),
         ),
       ],
     );

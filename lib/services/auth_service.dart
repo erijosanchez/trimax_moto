@@ -35,12 +35,7 @@ class AuthService {
     await ApiService().setToken(token);
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('motorizado', jsonEncode({
-      'id':      moto.id,
-      'nombre':  moto.nombre,
-      'sede':    moto.sede,
-      'telefono':moto.telefono,
-    }));
+    await prefs.setString('motorizado', jsonEncode(moto.toJson()));
 
     _motorizado = moto;
     return moto;

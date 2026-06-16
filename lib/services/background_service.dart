@@ -50,9 +50,6 @@ Future<bool> onIosBackground(ServiceInstance service) async {
 void onStart(ServiceInstance service) async {
   DartPluginRegistrant.ensureInitialized();
 
-  // Notificación persistente
-  final notifications = FlutterLocalNotificationsPlugin();
-
   if (service is AndroidServiceInstance) {
     service.on('setAsForeground').listen((_) {
       service.setAsForegroundService();

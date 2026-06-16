@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'api_service.dart';
 
 class GpsService {
   static final GpsService _instance = GpsService._internal();

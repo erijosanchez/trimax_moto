@@ -57,6 +57,9 @@ dependencies:
 
   google_fonts: ^6.2.1
 
+  # Abrir apps externas (Maps/Waze para navegar, dialer para llamar)
+  url_launcher: ^6.2.5
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,30 +1,51 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// Tests unitarios de la app Trimax Moto.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong2/latlong.dart';
 
-import 'package:trimax_moto/main.dart';
+import 'package:trimax_moto/models/ruta_calculada.dart';
+import 'package:trimax_moto/models/motorizado.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('RutaCalculada', () {
+    test('formatea distancia en metros y km', () {
+      final corta = RutaCalculada(puntos: const [], distanciaM: 850, duracionS: 120);
+      expect(corta.distanciaTexto, '850 m');
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final larga = RutaCalculada(puntos: const [], distanciaM: 1400, duracionS: 360);
+      expect(larga.distanciaTexto, '1.4 km');
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('formatea ETA en minutos y horas', () {
+      final corta = RutaCalculada(puntos: const [], distanciaM: 0, duracionS: 360);
+      expect(corta.etaTexto, '6 min');
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      final larga = RutaCalculada(puntos: const [], distanciaM: 0, duracionS: 4320);
+      expect(larga.etaTexto, '1 h 12 min');
+    });
+
+    test('resumen combina distancia y ETA', () {
+      final r = RutaCalculada(
+        puntos: const [LatLng(0, 0)],
+        distanciaM: 1400,
+        duracionS: 360,
+      );
+      expect(r.resumen, '1.4 km · 6 min');
+    });
+  });
+
+  group('Motorizado.tipo', () {
+    test('default es motorizado con perfil driving', () {
+      final m = Motorizado.fromJson({'id': 1, 'nombre': 'Ana', 'sede': 'Lima'});
+      expect(m.esDelivery, false);
+      expect(m.rutaProfile, 'driving');
+    });
+
+    test('detecta delivery y usa perfil cycling', () {
+      final m = Motorizado.fromJson(
+          {'id': 2, 'nombre': 'Beto', 'sede': 'Lima', 'tipo': 'delivery'});
+      expect(m.esDelivery, true);
+      expect(m.rutaProfile, 'cycling');
+    });
   });
 }
