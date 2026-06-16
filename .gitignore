@@ -37,6 +37,11 @@ migrate_working_dir/
 # Sensitive config
 lib/config/api_config.dart
 
+# Firma de release (NUNCA subir a git)
+android/key.properties
+*.jks
+*.keystore
+
 # Symbolication related
 app.*.symbols
 
