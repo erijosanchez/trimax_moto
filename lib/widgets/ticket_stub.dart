@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Tarjeta con textura de "ticket de despacho": papel sobre el tablero,
-/// con una perforación punteada que separa cabecera y cuerpo — como una
-/// guía de entrega real que el motorizado llevaría en el bolsillo.
+/// Tarjeta plana sobre el fondo de contenido, con sombra sutil — la
+/// tarjeta base para listados (entregas, rutas).
 class TicketStub extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
@@ -14,7 +13,7 @@ class TicketStub extends StatelessWidget {
     super.key,
     required this.child,
     this.padding = const EdgeInsets.all(14),
-    this.borderColor = AppColors.paperLine,
+    this.borderColor = AppColors.border,
     this.borderWidth = 1,
   });
 
@@ -22,7 +21,7 @@ class TicketStub extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.paper,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: borderColor, width: borderWidth),
         boxShadow: AppShadows.card,
@@ -30,82 +29,6 @@ class TicketStub extends StatelessWidget {
       child: Padding(padding: padding, child: child),
     );
   }
-}
-
-/// Línea de perforación punteada con muescas circulares en los bordes,
-/// como el corte de un ticket de papel. [notchBackground] debe coincidir
-/// con el color detrás de la tarjeta para que la muesca "corte" el papel.
-class PerforatedDivider extends StatelessWidget {
-  final Color notchBackground;
-  final EdgeInsetsGeometry margin;
-
-  const PerforatedDivider({
-    super.key,
-    this.notchBackground = AppColors.board,
-    this.margin = const EdgeInsets.symmetric(vertical: 10),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: margin,
-      child: SizedBox(
-        height: 12,
-        child: Stack(
-          alignment: Alignment.center,
-          clipBehavior: Clip.none,
-          children: [
-            CustomPaint(
-              size: const Size(double.infinity, 1),
-              painter: _DashedLinePainter(color: AppColors.paperLine),
-            ),
-            const Positioned(left: -20, child: _Notch()),
-            const Positioned(right: -20, child: _Notch()),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Notch extends StatelessWidget {
-  const _Notch();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 14,
-      height: 14,
-      decoration: const BoxDecoration(
-        color: AppColors.board,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
-}
-
-class _DashedLinePainter extends CustomPainter {
-  final Color color;
-  const _DashedLinePainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.4;
-    const dashWidth = 5.0;
-    const dashSpace = 4.0;
-    double x = 0;
-    final y = size.height / 2;
-    while (x < size.width) {
-      canvas.drawLine(Offset(x, y), Offset(x + dashWidth, y), paint);
-      x += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _DashedLinePainter oldDelegate) =>
-      oldDelegate.color != color;
 }
 
 /// Insignia circular tipo "perforado" con un número o ícono — usada como
@@ -132,7 +55,7 @@ class PunchBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.paper, width: borderWidth),
+        border: Border.all(color: AppColors.surface, width: borderWidth),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.45),
@@ -207,7 +130,7 @@ class MonoReadout extends StatelessWidget {
     required this.value,
     this.unit,
     this.label,
-    this.valueColor = AppColors.amber,
+    this.valueColor = AppColors.turquoise,
     this.labelColor = Colors.white54,
     this.valueSize = 22,
     this.glow = false,

@@ -23,7 +23,7 @@ class EntregaCard extends StatelessWidget {
       case 'fallido':
         return AppColors.fail;
       default:
-        return AppColors.amberDeep;
+        return AppColors.turquoiseDeep;
     }
   }
 
@@ -123,13 +123,13 @@ class EntregaCard extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(Icons.phone,
-                          color: AppColors.amberDeep, size: 15),
+                          color: AppColors.turquoiseDeep, size: 15),
                       const SizedBox(width: 4),
                       Text(
                         entrega.clienteTelefono!,
                         style: AppFonts.mono(
                           fontSize: 12.5,
-                          color: AppColors.amberDeep,
+                          color: AppColors.turquoiseDeep,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -141,7 +141,11 @@ class EntregaCard extends StatelessWidget {
 
             // Botones acción
             if (entrega.pendiente) ...[
-              const PerforatedDivider(),
+              Container(
+                height: 1,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                color: AppColors.border,
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(

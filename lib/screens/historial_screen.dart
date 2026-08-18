@@ -44,12 +44,12 @@ class _HistorialScreenState extends State<HistorialScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.board,
+      backgroundColor: AppColors.background,
       appBar: AppBar(title: const Text('Historial de Km')),
       body: _loading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.amber))
+          ? const Center(child: CircularProgressIndicator(color: AppColors.turquoise))
           : RefreshIndicator(
-              color: AppColors.amberDeep,
+              color: AppColors.turquoiseDeep,
               onRefresh: _cargar,
               child: _rutas.isEmpty
                   ? ListView(
@@ -87,7 +87,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.asphalt,
+        color: AppColors.navy,
         borderRadius: BorderRadius.circular(AppRadius.md),
         boxShadow: AppShadows.floating,
       ),
@@ -97,7 +97,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
             child: MonoReadout(
               value: '${_rutas.length}',
               label: 'Rutas',
-              valueColor: AppColors.amber,
+              valueColor: AppColors.turquoise,
               labelColor: Colors.white54,
               valueSize: 26,
               glow: true,
@@ -106,7 +106,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
           Container(
             width: 1,
             height: 40,
-            color: AppColors.asphaltLine,
+            color: AppColors.navyLine,
           ),
           Expanded(
             child: Padding(
@@ -115,7 +115,7 @@ class _HistorialScreenState extends State<HistorialScreen> {
                 value: _totalKm.toStringAsFixed(1),
                 unit: 'km',
                 label: 'Acumulado',
-                valueColor: AppColors.amber,
+                valueColor: AppColors.turquoise,
                 labelColor: Colors.white54,
                 valueSize: 26,
                 glow: true,
@@ -139,10 +139,10 @@ class _HistorialScreenState extends State<HistorialScreen> {
                   width: 46,
                   height: 46,
                   decoration: BoxDecoration(
-                    color: AppColors.amber.withValues(alpha: 0.14),
+                    color: AppColors.turquoise.withValues(alpha: 0.14),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.route, color: AppColors.amberDeep),
+                  child: const Icon(Icons.route, color: AppColors.turquoiseDeep),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -171,13 +171,17 @@ class _HistorialScreenState extends State<HistorialScreen> {
                   value: '${r['distance_km']}',
                   unit: 'km',
                   label: r['duracion'] ?? '—',
-                  valueColor: AppColors.amberDeep,
+                  valueColor: AppColors.turquoiseDeep,
                   labelColor: AppColors.inkFaint,
                   valueSize: 19,
                 ),
               ],
             ),
-            const PerforatedDivider(),
+            Container(
+              height: 1,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              color: AppColors.border,
+            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Row(

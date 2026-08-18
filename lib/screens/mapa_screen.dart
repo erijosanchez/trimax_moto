@@ -241,12 +241,12 @@ class _MapaScreenState extends State<MapaScreen> {
                   polylines: [
                     Polyline(
                       points: _rutaPlan!.puntos,
-                      color: AppColors.amber.withValues(alpha: 0.28),
+                      color: AppColors.turquoise.withValues(alpha: 0.28),
                       strokeWidth: 11,
                     ),
                     Polyline(
                       points: _rutaPlan!.puntos,
-                      color: AppColors.amberDeep,
+                      color: AppColors.turquoiseDeep,
                       strokeWidth: 5,
                     ),
                   ],
@@ -325,17 +325,17 @@ class _MapaScreenState extends State<MapaScreen> {
                 FloatingActionButton.small(
                   heroTag: 'fit',
                   onPressed: _encuadrarRuta,
-                  backgroundColor: AppColors.paper,
+                  backgroundColor: AppColors.surface,
                   child: const Icon(Icons.zoom_out_map,
-                      color: AppColors.amberDeep),
+                      color: AppColors.turquoiseDeep),
                 ),
                 const SizedBox(height: 10),
                 FloatingActionButton.small(
                   heroTag: 'center',
                   onPressed: _centrar,
-                  backgroundColor: AppColors.paper,
+                  backgroundColor: AppColors.surface,
                   child: const Icon(Icons.my_location,
-                      color: AppColors.amberDeep),
+                      color: AppColors.turquoiseDeep),
                 ),
               ],
             ),
@@ -352,7 +352,7 @@ class _MapaScreenState extends State<MapaScreen> {
       left: 0,
       right: 0,
       child: Container(
-        decoration: const BoxDecoration(color: AppColors.asphalt),
+        decoration: const BoxDecoration(color: AppColors.navy),
         child: SafeArea(
           child: Padding(
             padding:
@@ -418,7 +418,7 @@ class _MapaScreenState extends State<MapaScreen> {
       right: 0,
       child: Container(
         decoration: const BoxDecoration(
-          color: AppColors.paper,
+          color: AppColors.surface,
           borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
           boxShadow: AppShadows.floating,
         ),
@@ -430,7 +430,7 @@ class _MapaScreenState extends State<MapaScreen> {
               width: 42,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.paperLine,
+                color: AppColors.border,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -489,34 +489,34 @@ class _MapaScreenState extends State<MapaScreen> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.paperMuted,
+        color: AppColors.surfaceMuted,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.paperLine),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const StatusPill(label: 'SIGUIENTE', color: AppColors.amberDeep, dense: true),
+              const StatusPill(label: 'SIGUIENTE', color: AppColors.turquoiseDeep, dense: true),
               const Spacer(),
               if (_calculandoRuta)
                 const SizedBox(
                   width: 14,
                   height: 14,
                   child: CircularProgressIndicator(
-                      strokeWidth: 2, color: AppColors.amberDeep),
+                      strokeWidth: 2, color: AppColors.turquoiseDeep),
                 )
               else if (_rutaPlan != null)
                 Row(
                   children: [
                     const Icon(Icons.near_me,
-                        size: 15, color: AppColors.amberDeep),
+                        size: 15, color: AppColors.turquoiseDeep),
                     const SizedBox(width: 4),
                     Text(
                       _rutaPlan!.resumen,
                       style: AppFonts.mono(
-                        color: AppColors.amberDeep,
+                        color: AppColors.turquoiseDeep,
                         fontWeight: FontWeight.w700,
                         fontSize: 12.5,
                       ),
@@ -571,7 +571,7 @@ class _MapaScreenState extends State<MapaScreen> {
               height: 48,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.amber.withValues(alpha: 0.35 * (1.3 - val)),
+                color: AppColors.turquoise.withValues(alpha: 0.35 * (1.3 - val)),
               ),
             ),
           ),
@@ -581,12 +581,12 @@ class _MapaScreenState extends State<MapaScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: AppColors.amberDeep,
+            color: AppColors.turquoiseDeep,
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white, width: 2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.amberDeep.withValues(alpha: 0.45),
+                color: AppColors.turquoiseDeep.withValues(alpha: 0.45),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -613,7 +613,7 @@ class _MapaScreenState extends State<MapaScreen> {
         label = '✗';
         break;
       default:
-        color = AppColors.amberDeep;
+        color = AppColors.turquoiseDeep;
         label = '${e.ordenSecuencia}';
     }
 
@@ -668,7 +668,7 @@ class _MapaScreenState extends State<MapaScreen> {
         color = AppColors.fail;
         break;
       default:
-        color = AppColors.amberDeep;
+        color = AppColors.turquoiseDeep;
     }
 
     final esSiguiente = identical(e, _siguienteParada);
@@ -678,10 +678,10 @@ class _MapaScreenState extends State<MapaScreen> {
       margin: const EdgeInsets.only(right: 12, bottom: 4),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.paper,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(
-          color: esSiguiente ? AppColors.amberDeep : AppColors.paperLine,
+          color: esSiguiente ? AppColors.turquoiseDeep : AppColors.border,
           width: esSiguiente ? 1.6 : 1,
         ),
         boxShadow: AppShadows.card,

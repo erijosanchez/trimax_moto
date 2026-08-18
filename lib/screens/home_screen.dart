@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        backgroundColor: AppColors.paper,
+        backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.md),
         ),
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          backgroundColor: AppColors.paper,
+          backgroundColor: AppColors.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadius.md),
           ),
@@ -305,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         icon: const Icon(Icons.map),
         label: const Text('Ver mapa'),
-        backgroundColor: AppColors.amber,
+        backgroundColor: AppColors.turquoise,
         foregroundColor: AppColors.ink,
       ),
     );
@@ -315,19 +315,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final completadas = _entregas.where((e) => e.completado).length;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 14, 8, 16),
-      decoration: const BoxDecoration(color: AppColors.asphalt),
+      decoration: const BoxDecoration(color: AppColors.navy),
       child: Row(
         children: [
           Container(
             width: 46,
             height: 46,
             decoration: BoxDecoration(
-              color: AppColors.amber.withValues(alpha: 0.14),
+              color: AppColors.turquoise.withValues(alpha: 0.14),
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.amber.withValues(alpha: 0.5)),
+              border: Border.all(color: AppColors.turquoise.withValues(alpha: 0.5)),
             ),
             child: Icon(moto?.icono ?? Icons.delivery_dining,
-                color: AppColors.amber, size: 22),
+                color: AppColors.turquoise, size: 22),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -359,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: MonoReadout(
                 value: '$completadas/${_entregas.length}',
                 label: 'entregas',
-                valueColor: AppColors.amber,
+                valueColor: AppColors.turquoise,
                 valueSize: 18,
               ),
             ),
@@ -387,8 +387,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: const BoxDecoration(
-        color: AppColors.asphaltPanel,
-        border: Border(top: BorderSide(color: AppColors.asphaltLine)),
+        color: AppColors.navyPanel,
+        border: Border(top: BorderSide(color: AppColors.navyLine)),
       ),
       child: Row(
         children: [
@@ -405,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             .toStringAsFixed(2),
                         unit: 'km',
                         label: 'GPS activo',
-                        valueColor: AppColors.amber,
+                        valueColor: AppColors.turquoise,
                         valueSize: 24,
                         glow: true,
                       ),
@@ -438,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(
-                    color: AppColors.amber,
+                    color: AppColors.turquoise,
                     strokeWidth: 2,
                   ),
                 )
@@ -448,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: Text(enRuta ? 'Finalizar' : 'Iniciar'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        enRuta ? AppColors.fail : AppColors.amber,
+                        enRuta ? AppColors.fail : AppColors.turquoise,
                     foregroundColor:
                         enRuta ? Colors.white : AppColors.ink,
                   ),

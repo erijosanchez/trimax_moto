@@ -94,11 +94,11 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.asphalt,
+      backgroundColor: AppColors.navy,
       body: Stack(
         alignment: Alignment.center,
         children: [
-          // Resplandor ámbar tipo faro/piloto trasero de moto.
+          // Resplandor turquesa de marca.
           AnimatedBuilder(
             animation: _glow,
             builder: (_, child) => Container(
@@ -108,8 +108,8 @@ class _SplashScreenState extends State<SplashScreen>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.amber.withValues(alpha: 0.22 * _glow.value),
-                    AppColors.amber.withValues(alpha: 0.0),
+                    AppColors.turquoise.withValues(alpha: 0.22 * _glow.value),
+                    AppColors.turquoise.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -124,25 +124,14 @@ class _SplashScreenState extends State<SplashScreen>
                 children: [
                   Image.asset(
                     'assets/images/logo.png',
-                    width: 130,
-                    height: 130,
+                    width: 220,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 22),
-                  Text(
-                    'TRIMAX',
-                    style: AppFonts.display(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 6,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 14),
                   Container(
                     width: 40,
                     height: 3,
-                    color: AppColors.amber,
+                    color: AppColors.turquoise,
                   ),
                   const SizedBox(height: 14),
                   Text(
@@ -161,9 +150,9 @@ class _SplashScreenState extends State<SplashScreen>
                       borderRadius: BorderRadius.circular(2),
                       child: LinearProgressIndicator(
                         minHeight: 3,
-                        backgroundColor: AppColors.asphaltPanel,
+                        backgroundColor: AppColors.navyPanel,
                         valueColor: const AlwaysStoppedAnimation(
-                            AppColors.amber),
+                            AppColors.turquoise),
                       ),
                     ),
                   ),

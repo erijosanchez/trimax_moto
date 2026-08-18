@@ -2,68 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// Paleta Trimax — "tablero de despacho": chasis oscuro tipo tablero de
-/// moto + tickets de papel para el contenido, con un acento ámbar de
-/// señalización. Fuente única de verdad para colores.
+/// Paleta Trimax — identidad corporativa azul marino + turquesa del logo.
+/// Tarjetas planas sobre un fondo neutro, con el turquesa como acento único
+/// de marca. Fuente única de verdad para colores.
 class AppColors {
   AppColors._();
 
-  // Chasis oscuro (headers, GPS, splash, login)
-  static const Color asphalt = Color(0xFF15151B);
-  static const Color asphaltPanel = Color(0xFF201F27);
-  static const Color asphaltLine = Color(0xFF34333D);
+  // Chasis oscuro (headers, GPS, splash, login) — azul marino de marca.
+  static const Color navy = Color(0xFF003B63);
+  static const Color navyPanel = Color(0xFF0A4A70);
+  static const Color navyDeep = Color(0xFF001F35);
+  static const Color navyLine = Color(0xFF123954);
 
-  // Tablero / fondo de contenido (tipo clipboard)
-  static const Color board = Color(0xFFE9E2D0);
+  // Fondo de contenido
+  static const Color background = Color(0xFFEEF2F5);
 
-  // Ticket de papel (tarjetas)
-  static const Color paper = Color(0xFFFCFAF2);
-  static const Color paperMuted = Color(0xFFF1EBDA);
-  static const Color paperLine = Color(0xFFDED3B4);
+  // Tarjetas
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color surfaceMuted = Color(0xFFF5F7F9);
+  static const Color border = Color(0xFFE2E7EC);
 
-  // Texto sobre papel
-  static const Color ink = Color(0xFF1C1A17);
-  static const Color inkSoft = Color(0xFF6E6858);
-  static const Color inkFaint = Color(0xFFA79E89);
+  // Texto sobre tarjetas
+  static const Color ink = Color(0xFF142430);
+  static const Color inkSoft = Color(0xFF5C6B78);
+  static const Color inkFaint = Color(0xFF98A6B1);
 
-  // Acento de marca — ámbar de señalización
-  static const Color amber = Color(0xFFFFB020);
-  static const Color amberDeep = Color(0xFFCC7A00);
+  // Acento de marca — turquesa del logo
+  static const Color turquoise = Color(0xFF3FC1CC);
+  static const Color turquoiseDeep = Color(0xFF1D8E98);
 
   // Estados
-  static const Color route = Color(0xFF3FAE6B); // completado / GPS en vivo
-  static const Color fail = Color(0xFFE0524A); // fallido / detener
+  static const Color route = Color(0xFF1E9E6C); // completado / GPS en vivo
+  static const Color fail = Color(0xFFD6484A); // fallido / detener
 
-  // Alias retrocompatibles usados en pantallas
-  static const Color primary = amber;
-  static const Color primaryDark = amberDeep;
+  // Alias semánticos usados en pantallas
+  static const Color primary = turquoise;
+  static const Color primaryDark = turquoiseDeep;
   static const Color success = route;
   static const Color danger = fail;
-  static const Color warning = amber;
-  static const Color navy = asphalt;
+  static const Color warning = turquoise;
   static const Color accentGreen = route;
-  static const Color background = board;
-  static const Color surface = paper;
-  static const Color surfaceMuted = paperMuted;
   static const Color textPrimary = ink;
   static const Color textSecondary = inkSoft;
   static const Color textMuted = inkFaint;
-  static const Color border = paperLine;
 
   static const LinearGradient brandGradient = LinearGradient(
-    colors: [asphalt, asphaltPanel],
+    colors: [navy, navyDeep],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 }
 
-/// Sombras reutilizables — cálidas, como papel levantado del tablero.
+/// Sombras reutilizables — suaves, para tarjetas planas sobre fondo neutro.
 class AppShadows {
   AppShadows._();
 
   static const List<BoxShadow> card = [
     BoxShadow(
-      color: Color(0x1F1C1A17),
+      color: Color(0x14142430),
       blurRadius: 14,
       offset: Offset(0, 5),
     ),
@@ -71,7 +67,7 @@ class AppShadows {
 
   static const List<BoxShadow> floating = [
     BoxShadow(
-      color: Color(0x261C1A17),
+      color: Color(0x24142430),
       blurRadius: 24,
       offset: Offset(0, 10),
     ),
@@ -146,11 +142,11 @@ class AppTheme {
 
   static ThemeData get light {
     final base = ColorScheme.fromSeed(
-      seedColor: AppColors.amber,
+      seedColor: AppColors.turquoise,
       brightness: Brightness.light,
     ).copyWith(
-      primary: AppColors.amber,
-      surface: AppColors.paper,
+      primary: AppColors.turquoise,
+      surface: AppColors.surface,
       error: AppColors.fail,
     );
 
@@ -162,13 +158,13 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: base,
-      scaffoldBackgroundColor: AppColors.board,
+      scaffoldBackgroundColor: AppColors.background,
       textTheme: textTheme,
-      splashColor: AppColors.amber.withValues(alpha: 0.14),
-      highlightColor: AppColors.amber.withValues(alpha: 0.06),
+      splashColor: AppColors.turquoise.withValues(alpha: 0.14),
+      highlightColor: AppColors.turquoise.withValues(alpha: 0.06),
 
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.asphalt,
+        backgroundColor: AppColors.navy,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: false,
@@ -180,7 +176,7 @@ class AppTheme {
       ),
 
       cardTheme: CardThemeData(
-        color: AppColors.paper,
+        color: AppColors.surface,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.md),
@@ -189,7 +185,7 @@ class AppTheme {
 
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.amber,
+          backgroundColor: AppColors.turquoise,
           foregroundColor: AppColors.ink,
           elevation: 0,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
@@ -203,7 +199,7 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.ink,
-          side: const BorderSide(color: AppColors.paperLine),
+          side: const BorderSide(color: AppColors.border),
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           textStyle: AppFonts.body(fontSize: 15, fontWeight: FontWeight.w600),
           shape: RoundedRectangleBorder(
@@ -214,27 +210,27 @@ class AppTheme {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.paperMuted,
+        fillColor: AppColors.surfaceMuted,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         prefixIconColor: AppColors.inkSoft,
         labelStyle: AppFonts.body(color: AppColors.inkSoft),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
-          borderSide: const BorderSide(color: AppColors.paperLine),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
-          borderSide: const BorderSide(color: AppColors.paperLine),
+          borderSide: const BorderSide(color: AppColors.border),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
-          borderSide: const BorderSide(color: AppColors.amberDeep, width: 1.8),
+          borderSide: const BorderSide(color: AppColors.turquoiseDeep, width: 1.8),
         ),
       ),
 
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.asphalt,
+        backgroundColor: AppColors.navy,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -246,7 +242,7 @@ class AppTheme {
       ),
 
       dividerTheme: const DividerThemeData(
-        color: AppColors.paperLine,
+        color: AppColors.border,
         thickness: 1,
         space: 1,
       ),
