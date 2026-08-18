@@ -7,6 +7,7 @@ import '../services/auth_service.dart';
 import '../services/gps_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/entrega_card.dart';
+import '../widgets/ticket_stub.dart';
 import 'login_screen.dart';
 import 'mapa_screen.dart';
 import 'historial_screen.dart';
@@ -115,9 +116,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmar = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('¿Finalizar ruta?'),
-        content: const Text(
+        backgroundColor: AppColors.paper,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+        title: Text('¿Finalizar ruta?', style: AppFonts.display(fontSize: 18)),
+        content: Text(
           'Se calcularán los km recorridos y se cerrará la ruta del día.',
+          style: AppFonts.body(color: AppColors.inkSoft),
         ),
         actions: [
           TextButton(
@@ -127,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.danger),
+                backgroundColor: AppColors.fail, foregroundColor: Colors.white),
             child: const Text('Finalizar'),
           ),
         ],
@@ -148,11 +154,15 @@ class _HomeScreenState extends State<HomeScreen> {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Row(
+          backgroundColor: AppColors.paper,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: AppColors.success),
-              SizedBox(width: 8),
-              Text('Ruta finalizada'),
+              const Icon(Icons.check_circle, color: AppColors.route),
+              const SizedBox(width: 8),
+              Text('Ruta finalizada', style: AppFonts.display(fontSize: 18)),
             ],
           ),
           content: Column(
@@ -194,8 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: AppColors.textSecondary)),
-          Text(valor, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(label, style: AppFonts.body(color: AppColors.inkSoft)),
+          Text(valor,
+              style: AppFonts.mono(fontWeight: FontWeight.w700, color: AppColors.ink)),
         ],
       ),
     );
@@ -294,8 +305,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         icon: const Icon(Icons.map),
         label: const Text('Ver mapa'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.amber,
+        foregroundColor: AppColors.ink,
       ),
     );
   }
@@ -304,18 +315,19 @@ class _HomeScreenState extends State<HomeScreen> {
     final completadas = _entregas.where((e) => e.completado).length;
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 14, 8, 16),
-      decoration: const BoxDecoration(gradient: AppColors.brandGradient),
+      decoration: const BoxDecoration(color: AppColors.asphalt),
       child: Row(
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: 46,
+            height: 46,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
+              color: AppColors.amber.withValues(alpha: 0.14),
               shape: BoxShape.circle,
+              border: Border.all(color: AppColors.amber.withValues(alpha: 0.5)),
             ),
             child: Icon(moto?.icono ?? Icons.delivery_dining,
-                color: Colors.white, size: 24),
+                color: AppColors.amber, size: 22),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -324,17 +336,18 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text(
                   moto?.nombre ?? '',
-                  style: const TextStyle(
+                  style: AppFonts.display(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  '${moto?.etiqueta ?? ''} · Sede ${moto?.sede ?? ''} · ${_entregas.length} entregas',
-                  style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontSize: 12,
+                  '${moto?.etiqueta.toUpperCase() ?? ''} · SEDE ${moto?.sede ?? ''}',
+                  style: AppFonts.mono(
+                    color: Colors.white.withValues(alpha: 0.5),
+                    fontSize: 10.5,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ],
@@ -343,28 +356,16 @@ class _HomeScreenState extends State<HomeScreen> {
           if (_entregas.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(right: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    '$completadas/${_entregas.length}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'completadas',
-                    style: TextStyle(
-                        color: Colors.white.withValues(alpha: 0.6),
-                        fontSize: 11),
-                  ),
-                ],
+              child: MonoReadout(
+                value: '$completadas/${_entregas.length}',
+                label: 'entregas',
+                valueColor: AppColors.amber,
+                valueSize: 18,
               ),
             ),
           IconButton(
             tooltip: 'Historial',
-            icon: const Icon(Icons.history, color: Colors.white70),
+            icon: const Icon(Icons.history, color: Colors.white54),
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const HistorialScreen()),
@@ -372,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
             tooltip: 'Cerrar sesión',
-            icon: const Icon(Icons.logout, color: Colors.white70),
+            icon: const Icon(Icons.logout, color: Colors.white54),
             onPressed: _logout,
           ),
         ],
@@ -384,42 +385,29 @@ class _HomeScreenState extends State<HomeScreen> {
     final enRuta = _rutaActiva != null && _rutaActiva!.activa;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      color: AppColors.navy,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      decoration: const BoxDecoration(
+        color: AppColors.asphaltPanel,
+        border: Border(top: BorderSide(color: AppColors.asphaltLine)),
+      ),
       child: Row(
         children: [
           Expanded(
             child: enRuta
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                ? Row(
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: AppColors.accentGreen,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            'GPS activo',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.7),
-                              fontSize: 11,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '${_distanciaKmLive > 0 ? _distanciaKmLive.toStringAsFixed(2) : (_rutaActiva?.distanceKm ?? 0).toStringAsFixed(2)} km recorridos',
-                        style: const TextStyle(
-                          color: AppColors.warning,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      _PulsingDot(color: AppColors.route),
+                      const SizedBox(width: 8),
+                      MonoReadout(
+                        value: (_distanciaKmLive > 0
+                                ? _distanciaKmLive
+                                : (_rutaActiva?.distanceKm ?? 0))
+                            .toStringAsFixed(2),
+                        unit: 'km',
+                        label: 'GPS activo',
+                        valueColor: AppColors.amber,
+                        valueSize: 24,
+                        glow: true,
                       ),
                     ],
                   )
@@ -427,16 +415,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'GPS no iniciado',
-                        style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.4),
-                            fontSize: 11),
+                        'GPS EN ESPERA',
+                        style: AppFonts.mono(
+                          color: Colors.white.withValues(alpha: 0.35),
+                          fontSize: 10.5,
+                          letterSpacing: 0.8,
+                        ),
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         'Inicia para registrar km',
-                        style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.6),
-                            fontSize: 13),
+                        style: AppFonts.body(
+                          color: Colors.white.withValues(alpha: 0.65),
+                          fontSize: 13.5,
+                        ),
                       ),
                     ],
                   ),
@@ -446,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(
-                    color: Colors.white,
+                    color: AppColors.amber,
                     strokeWidth: 2,
                   ),
                 )
@@ -456,8 +448,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: Text(enRuta ? 'Finalizar' : 'Iniciar'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
-                        enRuta ? AppColors.danger : AppColors.success,
-                    foregroundColor: Colors.white,
+                        enRuta ? AppColors.fail : AppColors.amber,
+                    foregroundColor:
+                        enRuta ? Colors.white : AppColors.ink,
                   ),
                 ),
         ],
@@ -467,22 +460,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildVacio() {
     return ListView(
-      children: const [
-        SizedBox(height: 90),
-        Icon(Icons.inbox_outlined, size: 64, color: AppColors.textMuted),
-        SizedBox(height: 16),
+      children: [
+        const SizedBox(height: 90),
+        const Icon(Icons.inbox_outlined, size: 56, color: AppColors.inkFaint),
+        const SizedBox(height: 16),
         Text(
-          'Sin entregas asignadas hoy',
+          'SIN ASIGNACIONES',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textSecondary, fontSize: 16),
+          style: AppFonts.mono(
+            color: AppColors.inkFaint,
+            fontSize: 12,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.2,
+          ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
-          'El administrador debe asignar entregas\ndesde el CRM',
+          'Sin entregas asignadas hoy.\nEl administrador debe asignarlas desde el CRM.',
           textAlign: TextAlign.center,
-          style: TextStyle(color: AppColors.textMuted, fontSize: 13),
+          style: AppFonts.body(color: AppColors.inkSoft, fontSize: 13),
         ),
       ],
+    );
+  }
+}
+
+class _PulsingDot extends StatefulWidget {
+  final Color color;
+  const _PulsingDot({required this.color});
+
+  @override
+  State<_PulsingDot> createState() => _PulsingDotState();
+}
+
+class _PulsingDotState extends State<_PulsingDot>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  )..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: Tween(begin: 0.35, end: 1.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+      ),
+      child: Container(
+        width: 9,
+        height: 9,
+        decoration: BoxDecoration(color: widget.color, shape: BoxShape.circle),
+      ),
     );
   }
 }

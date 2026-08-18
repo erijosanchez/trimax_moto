@@ -52,17 +52,22 @@ class _SplashScreenState extends State<SplashScreen>
   late final AnimationController _controller;
   late final Animation<double> _fade;
   late final Animation<double> _scale;
+  late final Animation<double> _glow;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 1000),
     );
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
     _scale = Tween<double>(begin: 0.85, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+    );
+    _glow = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.2, 1.0, curve: Curves.easeOut),
     );
     _controller.forward();
     _checkAuth();
@@ -89,10 +94,28 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.brandGradient),
-        child: Center(
-          child: FadeTransition(
+      backgroundColor: AppColors.asphalt,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Resplandor ámbar tipo faro/piloto trasero de moto.
+          AnimatedBuilder(
+            animation: _glow,
+            builder: (_, child) => Container(
+              width: 340,
+              height: 340,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    AppColors.amber.withValues(alpha: 0.22 * _glow.value),
+                    AppColors.amber.withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          FadeTransition(
             opacity: _fade,
             child: ScaleTransition(
               scale: _scale,
@@ -101,43 +124,54 @@ class _SplashScreenState extends State<SplashScreen>
                 children: [
                   Image.asset(
                     'assets/images/logo.png',
-                    width: 140,
-                    height: 140,
+                    width: 130,
+                    height: 130,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Trimax Moto',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 22),
                   Text(
-                    'Logística en movimiento',
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.6),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
+                    'TRIMAX',
+                    style: AppFonts.display(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 6,
                     ),
                   ),
-                  const SizedBox(height: 36),
-                  const SizedBox(
-                    width: 26,
-                    height: 26,
-                    child: CircularProgressIndicator(
-                      color: Colors.white70,
-                      strokeWidth: 2.4,
+                  const SizedBox(height: 10),
+                  Container(
+                    width: 40,
+                    height: 3,
+                    color: AppColors.amber,
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    'LOGÍSTICA EN MOVIMIENTO',
+                    style: AppFonts.mono(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  const SizedBox(height: 44),
+                  SizedBox(
+                    width: 120,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: LinearProgressIndicator(
+                        minHeight: 3,
+                        backgroundColor: AppColors.asphaltPanel,
+                        valueColor: const AlwaysStoppedAnimation(
+                            AppColors.amber),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

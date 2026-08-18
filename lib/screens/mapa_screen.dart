@@ -12,6 +12,7 @@ import '../services/api_service.dart';
 import '../services/auth_service.dart';
 import '../services/routing_service.dart';
 import '../theme/app_theme.dart';
+import '../widgets/ticket_stub.dart';
 import 'dart:ui' as ui;
 
 class MapaScreen extends StatefulWidget {
@@ -240,12 +241,12 @@ class _MapaScreenState extends State<MapaScreen> {
                   polylines: [
                     Polyline(
                       points: _rutaPlan!.puntos,
-                      color: AppColors.primary.withValues(alpha: 0.25),
+                      color: AppColors.amber.withValues(alpha: 0.28),
                       strokeWidth: 11,
                     ),
                     Polyline(
                       points: _rutaPlan!.puntos,
-                      color: AppColors.primary,
+                      color: AppColors.amberDeep,
                       strokeWidth: 5,
                     ),
                   ],
@@ -275,7 +276,7 @@ class _MapaScreenState extends State<MapaScreen> {
                   polylines: [
                     Polyline(
                       points: _recorrido,
-                      color: AppColors.success,
+                      color: AppColors.route,
                       strokeWidth: 3.5,
                     ),
                   ],
@@ -324,17 +325,17 @@ class _MapaScreenState extends State<MapaScreen> {
                 FloatingActionButton.small(
                   heroTag: 'fit',
                   onPressed: _encuadrarRuta,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.paper,
                   child: const Icon(Icons.zoom_out_map,
-                      color: AppColors.primary),
+                      color: AppColors.amberDeep),
                 ),
                 const SizedBox(height: 10),
                 FloatingActionButton.small(
                   heroTag: 'center',
                   onPressed: _centrar,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.paper,
                   child: const Icon(Icons.my_location,
-                      color: AppColors.primary),
+                      color: AppColors.amberDeep),
                 ),
               ],
             ),
@@ -351,7 +352,7 @@ class _MapaScreenState extends State<MapaScreen> {
       left: 0,
       right: 0,
       child: Container(
-        decoration: const BoxDecoration(gradient: AppColors.brandGradient),
+        decoration: const BoxDecoration(color: AppColors.asphalt),
         child: SafeArea(
           child: Padding(
             padding:
@@ -362,10 +363,10 @@ class _MapaScreenState extends State<MapaScreen> {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Mapa de ruta',
-                    style: TextStyle(
+                    style: AppFonts.display(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -377,23 +378,23 @@ class _MapaScreenState extends State<MapaScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.accentGreen.withValues(alpha: 0.18),
+                      color: AppColors.route.withValues(alpha: 0.16),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: AppColors.accentGreen.withValues(alpha: 0.5),
+                        color: AppColors.route.withValues(alpha: 0.5),
                       ),
                     ),
                     child: Row(
                       children: [
                         const Icon(Icons.circle,
-                            color: AppColors.accentGreen, size: 8),
+                            color: AppColors.route, size: 8),
                         const SizedBox(width: 6),
                         Text(
                           '${_distanciaKm.toStringAsFixed(2)} km',
-                          style: const TextStyle(
-                            color: AppColors.accentGreen,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                          style: AppFonts.mono(
+                            color: AppColors.route,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13.5,
                           ),
                         ),
                       ],
@@ -417,7 +418,7 @@ class _MapaScreenState extends State<MapaScreen> {
       right: 0,
       child: Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppColors.paper,
           borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
           boxShadow: AppShadows.floating,
         ),
@@ -429,7 +430,7 @@ class _MapaScreenState extends State<MapaScreen> {
               width: 42,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.border,
+                color: AppColors.paperLine,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -442,17 +443,17 @@ class _MapaScreenState extends State<MapaScreen> {
                 child: _buildSiguienteCard(sig),
               )
             else
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children: [
-                    Icon(Icons.check_circle, color: AppColors.success),
-                    SizedBox(width: 10),
+                    const Icon(Icons.check_circle, color: AppColors.route),
+                    const SizedBox(width: 10),
                     Text(
                       'Sin paradas pendientes',
-                      style: TextStyle(
+                      style: AppFonts.body(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                        color: AppColors.ink,
                       ),
                     ),
                   ],
@@ -488,51 +489,36 @@ class _MapaScreenState extends State<MapaScreen> {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
+        color: AppColors.paperMuted,
         borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.paperLine),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Text(
-                  'SIGUIENTE',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ),
+              const StatusPill(label: 'SIGUIENTE', color: AppColors.amberDeep, dense: true),
               const Spacer(),
               if (_calculandoRuta)
                 const SizedBox(
                   width: 14,
                   height: 14,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: AppColors.amberDeep),
                 )
               else if (_rutaPlan != null)
                 Row(
                   children: [
                     const Icon(Icons.near_me,
-                        size: 15, color: AppColors.primary),
+                        size: 15, color: AppColors.amberDeep),
                     const SizedBox(width: 4),
                     Text(
                       _rutaPlan!.resumen,
-                      style: const TextStyle(
-                        color: AppColors.primary,
+                      style: AppFonts.mono(
+                        color: AppColors.amberDeep,
                         fontWeight: FontWeight.w700,
-                        fontSize: 13,
+                        fontSize: 12.5,
                       ),
                     ),
                   ],
@@ -542,17 +528,16 @@ class _MapaScreenState extends State<MapaScreen> {
           const SizedBox(height: 8),
           Text(
             sig.clienteNombre,
-            style: const TextStyle(
+            style: AppFonts.display(
               fontWeight: FontWeight.w700,
               fontSize: 15,
-              color: AppColors.textPrimary,
+              color: AppColors.ink,
             ),
           ),
           const SizedBox(height: 2),
           Text(
             sig.direccion,
-            style: const TextStyle(
-                fontSize: 12.5, color: AppColors.textSecondary),
+            style: AppFonts.body(fontSize: 12.5, color: AppColors.inkSoft),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -586,7 +571,7 @@ class _MapaScreenState extends State<MapaScreen> {
               height: 48,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColors.primary.withValues(alpha: 0.3 * (1.3 - val)),
+                color: AppColors.amber.withValues(alpha: 0.35 * (1.3 - val)),
               ),
             ),
           ),
@@ -596,11 +581,12 @@ class _MapaScreenState extends State<MapaScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: AppColors.primary,
+            color: AppColors.amberDeep,
             shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.4),
+                color: AppColors.amberDeep.withValues(alpha: 0.45),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -619,15 +605,15 @@ class _MapaScreenState extends State<MapaScreen> {
 
     switch (e.estado) {
       case 'completado':
-        color = AppColors.success;
+        color = AppColors.route;
         label = '✓';
         break;
       case 'fallido':
-        color = AppColors.danger;
+        color = AppColors.fail;
         label = '✗';
         break;
       default:
-        color = AppColors.primary;
+        color = AppColors.amberDeep;
         label = '${e.ordenSecuencia}';
     }
 
@@ -652,9 +638,9 @@ class _MapaScreenState extends State<MapaScreen> {
           child: Center(
             child: Text(
               label,
-              style: const TextStyle(
+              style: AppFonts.mono(
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
                 fontSize: 13,
               ),
             ),
@@ -676,13 +662,13 @@ class _MapaScreenState extends State<MapaScreen> {
     Color color;
     switch (e.estado) {
       case 'completado':
-        color = AppColors.success;
+        color = AppColors.route;
         break;
       case 'fallido':
-        color = AppColors.danger;
+        color = AppColors.fail;
         break;
       default:
-        color = AppColors.primary;
+        color = AppColors.amberDeep;
     }
 
     final esSiguiente = identical(e, _siguienteParada);
@@ -692,10 +678,10 @@ class _MapaScreenState extends State<MapaScreen> {
       margin: const EdgeInsets.only(right: 12, bottom: 4),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.paper,
         borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(
-          color: esSiguiente ? AppColors.primary : AppColors.border,
+          color: esSiguiente ? AppColors.amberDeep : AppColors.paperLine,
           width: esSiguiente ? 1.6 : 1,
         ),
         boxShadow: AppShadows.card,
@@ -705,32 +691,22 @@ class _MapaScreenState extends State<MapaScreen> {
         children: [
           Row(
             children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration:
-                    BoxDecoration(color: color, shape: BoxShape.circle),
-                child: Center(
-                  child: Text(
-                    e.completado
-                        ? '✓'
-                        : e.fallido
-                            ? '✗'
-                            : '${e.ordenSecuencia}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+              PunchBadge(
+                size: 24,
+                borderWidth: 1.5,
+                color: color,
+                label: e.completado
+                    ? '✓'
+                    : e.fallido
+                        ? '✗'
+                        : '${e.ordenSecuencia}',
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   e.clienteNombre,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 13),
+                  style: AppFonts.display(
+                      fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.ink),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -739,8 +715,7 @@ class _MapaScreenState extends State<MapaScreen> {
           const SizedBox(height: 4),
           Text(
             e.direccion,
-            style: const TextStyle(
-                fontSize: 11, color: AppColors.textSecondary),
+            style: AppFonts.body(fontSize: 11, color: AppColors.inkSoft),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),

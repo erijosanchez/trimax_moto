@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/entrega.dart';
 import '../theme/app_theme.dart';
+import 'ticket_stub.dart';
 
 class EntregaCard extends StatelessWidget {
   final Entrega entrega;
@@ -18,11 +19,22 @@ class EntregaCard extends StatelessWidget {
   Color get _color {
     switch (entrega.estado) {
       case 'completado':
-        return AppColors.success;
+        return AppColors.route;
       case 'fallido':
-        return AppColors.danger;
+        return AppColors.fail;
       default:
-        return AppColors.primary;
+        return AppColors.amberDeep;
+    }
+  }
+
+  String get _estadoLabel {
+    switch (entrega.estado) {
+      case 'completado':
+        return 'Entregado';
+      case 'fallido':
+        return 'Fallido';
+      default:
+        return 'Pendiente';
     }
   }
 
@@ -37,41 +49,23 @@ class EntregaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(AppRadius.md),
-        border: Border(left: BorderSide(color: _color, width: 5)),
-        boxShadow: AppShadows.card,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: TicketStub(
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // Cabecera
             Row(
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration:
-                      BoxDecoration(color: _color, shape: BoxShape.circle),
-                  child: Center(
-                    child: Text(
-                      entrega.completado
-                          ? '✓'
-                          : entrega.fallido
-                              ? '✗'
-                              : '${entrega.ordenSecuencia}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                PunchBadge(
+                  label: entrega.completado
+                      ? '✓'
+                      : entrega.fallido
+                          ? '✗'
+                          : '${entrega.ordenSecuencia}',
+                  color: _color,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -80,43 +74,24 @@ class EntregaCard extends StatelessWidget {
                     children: [
                       Text(
                         entrega.clienteNombre,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
+                        style: AppFonts.display(
                           fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.ink,
                         ),
                       ),
                       if (entrega.referencia != null)
                         Text(
                           'Ref: ${entrega.referencia}',
-                          style: const TextStyle(
-                            color: AppColors.textSecondary,
+                          style: AppFonts.body(
+                            color: AppColors.inkSoft,
                             fontSize: 12,
                           ),
                         ),
                     ],
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: _color.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: _color.withValues(alpha: 0.3)),
-                  ),
-                  child: Text(
-                    entrega.completado
-                        ? 'Entregado'
-                        : entrega.fallido
-                            ? 'Fallido'
-                            : 'Pendiente',
-                    style: TextStyle(
-                      color: _color,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                StatusPill(label: _estadoLabel, color: _color),
               ],
             ),
             const SizedBox(height: 10),
@@ -130,8 +105,7 @@ class EntregaCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     entrega.direccion,
-                    style: const TextStyle(
-                        fontSize: 13, color: AppColors.textPrimary),
+                    style: AppFonts.body(fontSize: 13, color: AppColors.ink),
                   ),
                 ),
               ],
@@ -149,13 +123,13 @@ class EntregaCard extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(Icons.phone,
-                          color: AppColors.primary, size: 15),
+                          color: AppColors.amberDeep, size: 15),
                       const SizedBox(width: 4),
                       Text(
                         entrega.clienteTelefono!,
-                        style: const TextStyle(
+                        style: AppFonts.mono(
                           fontSize: 12.5,
-                          color: AppColors.primary,
+                          color: AppColors.amberDeep,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -167,45 +141,49 @@ class EntregaCard extends StatelessWidget {
 
             // Botones acción
             if (entrega.pendiente) ...[
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: ElevatedButton.icon(
-                      onPressed: onCompletar,
-                      icon: const Icon(Icons.check, size: 18),
-                      label: const Text('Entregado'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.success,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+              const PerforatedDivider(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: ElevatedButton.icon(
+                        onPressed: onCompletar,
+                        icon: const Icon(Icons.check, size: 18),
+                        label: const Text('Entregado'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.route,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton.icon(
-                      onPressed: onFallar,
-                      icon: const Icon(Icons.close, size: 16),
-                      label: const Text('Fallido'),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.danger,
-                        side: const BorderSide(color: AppColors.danger),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      flex: 2,
+                      child: OutlinedButton.icon(
+                        onPressed: onFallar,
+                        icon: const Icon(Icons.close, size: 16),
+                        label: const Text('Fallido'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppColors.fail,
+                          side: const BorderSide(color: AppColors.fail),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
+            ] else
+              const SizedBox(height: 10),
           ],
         ),
       ),
