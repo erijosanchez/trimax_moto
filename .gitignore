@@ -37,6 +37,9 @@ migrate_working_dir/
 # Sensitive config
 lib/config/api_config.dart
 
+# Documentación interna (no se versiona)
+/doc/
+
 # Firma de release (NUNCA subir a git)
 android/key.properties
 *.jks
